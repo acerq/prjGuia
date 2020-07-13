@@ -116,7 +116,8 @@ function incluirDbApp() {
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
   objectStoreRequest.onsuccess = function(event) {
-    store.add({
+	db = event.target.result;
+	objectStoreRequest = store.add({
       login: cpf,
       senha: funcaoMD5(senha),
       nome: nome,
@@ -125,6 +126,9 @@ function incluirDbApp() {
       endereco : celular,
       ehMedico: false
     });
+    objectStoreRequest.onsuccess = function(event) {
+    	window.location.href = "inicio.html";
+    }
   };
 }
 
@@ -136,7 +140,6 @@ function renderCriarUsuario(data) {
     alert("Problemas de Conexão com o servidor.");
     return;
   }
-  window.location.href = "inicio.html";
 }
 
 //-----------------------------------------------------------------------------------------//

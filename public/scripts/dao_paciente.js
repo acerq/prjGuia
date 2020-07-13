@@ -136,8 +136,7 @@ export default class DAOPaciente {
         celularNovo.replace(/\(|\)|\s|-/g, "") +
         "/" +
         enderecoNovo
-    )
-      .then(response => {
+    ).then(response => {
         console.log("(app.js) incluirPaciente response");
         return true;
       })

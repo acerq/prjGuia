@@ -156,8 +156,10 @@ function doObterUsuarioCorrente() {
 
 function renderObterUsuarioCorrente(retorno) {
   usrApp = retorno;
-  if (usrApp.ehMedico) $("#menu").load("menu_medico.html");
-  else $("#menu").load("menu_paciente.html");
+  if (usrApp.ehMedico) 
+	  $("#menu").load("menu_medico.html");
+  else 
+	  $("#menu").load("menu_paciente.html");
 
   if (inicio) {
     console.log(usrApp);
@@ -205,7 +207,7 @@ function fecharApp() {
     navigator.app.exitApp();
   }
   catch(e) {
-    window.close();
+	  window.history.go(-(window.history.length - 1));
+	  // window.close();
   }
-  return;
 }

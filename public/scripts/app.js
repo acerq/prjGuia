@@ -24,6 +24,7 @@ var faturar = null;
 var senha = null;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
+var funcaoObterUsuario = new Function("b", "return usrApp.login");
 
 //-----------------------------------------------------------------------------------------//
 
@@ -138,8 +139,8 @@ function renderObterLocais(data) {
   var arrayLocais = data;
 
   arrayLocais.sort(function(a, b) {
-    var keyA = a.local;
-    var keyB = b.local;
+    var keyA = a.codigolocal;
+    var keyB = b.codigolocal;
     if (keyA < keyB) return -1;
     if (keyA > keyB) return 1;
     return 0;
@@ -149,8 +150,8 @@ function renderObterLocais(data) {
     var retorno = "<option value='-1'>Selecione...</option>";
 
     arrayLocais.forEach((value, index, array) => {
-      var codigo = value.codigo;
-      var descricao = value.local;
+      var codigo = value.codigolocal;
+      var descricao = value.nomelocal;
       retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
       if (index === array.length - 1) res(retorno);
     });
@@ -333,7 +334,7 @@ function renderObterExames(data) {
 
 function doSolicitacao() {
   executante = codExecutante;
-  solicitante = "XXXX";
+  solicitante = funcaoObterUsuario();
   let dadosPaciente = cbPaciente.value.split(SEPARADOR);      
   paciente = dadosPaciente[0];
   cpf = dadosPaciente[1].replace(/\.|-/g,'');
@@ -378,9 +379,14 @@ function renderSolicitacao(resposta) {
     console.log("(app.js) renderSolicitacao sem conteúdo");
     alert("Erro na solicitação do exame.");
     return;
-  } else console.log("(app.js) renderSolicitacao -> ", resposta);
-  alert("Exame agendado com sucesso");
-  history.go(-1);
+  } 
+  console.log("(app.js) renderSolicitacao -> ", resposta);
+  if(resposta.mensagem == "Ok")	{
+	  alert("Exame agendado com sucesso");
+  	  history.go(-1);
+  } else {
+	  alert(resposta.mensagem);	  
+  }
 }
 
 //-----------------------------------------------------------------------------------------//

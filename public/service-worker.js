@@ -7,7 +7,6 @@ var timeLogin = null;
 var idSolicitante = null;
 var lastCall = null;
 
-// CODELAB: Add list of files to cache here.
 const FILES_TO_CACHE = [
   "/",
   "/bdpaciente.html",
@@ -27,7 +26,6 @@ const FILES_TO_CACHE = [
   "/scripts/jquery.js",
   "/scripts/jquery.maskedinput-1.4.1.pack.js",
   "/styles/inline.css"
-
 ];
 
 self.addEventListener("install", evt => {

@@ -1,6 +1,6 @@
 "use strict";
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 var instalando = false;
 var requestDB = null;
@@ -14,12 +14,13 @@ const divInstrucao = document.getElementById("divInstrucao");
 const tfLogin = document.getElementById("tfLogin");
 const tfSenha = document.getElementById("tfSenha");
 const btOk = document.getElementById("btOk");
-const btCriar = document.getElementById("btCriar");
+const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
 
 var funcaoMD5 = new Function('a', 'return md5(a)');
+var estadoBtNovo = "Conta";
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function initApp() {
   console.log("init");
@@ -34,7 +35,7 @@ function initApp() {
   abrirDbApp();
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function abrirDbApp() {
   requestDB = window.indexedDB.open("AppUsr", 1);
@@ -60,7 +61,7 @@ function abrirDbApp() {
   };
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function obterAppUsr() {
   try {
@@ -76,6 +77,9 @@ function obterAppUsr() {
     if (cursor) {
       usrApp = cursor.value;
       tfLogin.value = usrApp.login;
+      tfLogin.disabled = true;
+      btNovo.textContent = "Novo Login";
+      estadoBtNovo = "Login";
       
       if(usrApp.ehMedico == true) {
         labelLogin.innerHTML = "Login:";
@@ -84,12 +88,15 @@ function obterAppUsr() {
       }
       
     } else {
+      tfLogin.disabled = false;
+      btNovo.textContent = "Nova Conta";
+      estadoBtNovo = "Conta";
       instalacaoApp();
     }
   };
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
   transacao = db.transaction(["AppUsr"], "readwrite");
@@ -102,19 +109,22 @@ function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
   objectStoreRequest.onsuccess = function(event) {
-    store.add({
-      login: login,
-      senha: funcaoMD5(senha),
-      nome: nome,
-      email: email,
-      celular : celular,
-      endereco : endereco,
-      ehMedico: ehMedico
-    });
-  };
+	  objectStoreRequest = store.add({
+		  login: login,
+		  senha: funcaoMD5(senha),
+		  nome: nome,
+		  email: email,
+		  celular : celular,
+		  endereco : endereco,
+		  ehMedico: ehMedico
+	  });
+	  objectStoreRequest.onsuccess = function(event) {
+		  window.location.href = "inicio.html";
+	  }
+   };
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function instalacaoApp() {
   instalando = true;
@@ -122,7 +132,7 @@ function instalacaoApp() {
     "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function renderEfetuarLogin(data) {
   if (data == null) {
@@ -149,7 +159,6 @@ function renderEfetuarLogin(data) {
 
   if (data.hasOwnProperty("status")) {
     if (data.status == "success") {
-      if (instalando) {
         incluirDbApp(
           tfLogin.value,
           null,
@@ -157,15 +166,13 @@ function renderEfetuarLogin(data) {
           null,
           null,
           null,
-          true //TODO data.ehMedico
+          true 
         );
-      }
-      window.location.href = "inicio.html";
     }
   }
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function doDeterminarUsuarioLocal() {
   console.log("(app.js) Executando Determinar Usuário Local ");
@@ -193,7 +200,7 @@ function doDeterminarUsuarioLocal() {
     });
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function doEfetuarLogin(login, senha) {
   console.log("(app.js) Executando efetuarLogin " + login + " " + senha);
@@ -208,14 +215,14 @@ function doEfetuarLogin(login, senha) {
     });
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function callbackOk() {
   console.log("(app.js) callbackOk");
   const login = tfLogin.value;
   const senha = tfSenha.value;
 
-  //document.body.style.cursor = "url(/images/wait.gif)";
+  // document.body.style.cursor = "url(/images/wait.gif)";
   document.body.style.cursor = "wait";
   // chama efetuarLogin e atualiza a tela
   doEfetuarLogin(login, senha).then(retorno => {
@@ -225,13 +232,23 @@ function callbackOk() {
   });
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 function callbackCriar() {
-  window.location.href = "cadusuario.html";
+  if(estadoBtNovo == "Conta") 
+	  window.location.href = "cadusuario.html";
+  else {
+	  // estadoBtNovo == "Login";
+	  labelLogin.innerHTML = "Login:";
+      tfLogin.value = "";
+      tfLogin.disabled = false;
+      btNovo.textContent = "Nova Conta";
+      estadoBtNovo = "Conta";
+      divInstrucao.innerHTML = "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
+  }
 }
 
-//-----------------------------------------------------------------------------------------//
+// -----------------------------------------------------------------------------------------//
 
 btOk.addEventListener("click", callbackOk);
-btCriar.addEventListener("click", callbackCriar);
+btNovo.addEventListener("click", callbackCriar);
