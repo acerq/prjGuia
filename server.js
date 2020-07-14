@@ -494,7 +494,7 @@ function startServer() {
   //
   //
 
-  // Manipulando requisições para arquivos estáticos
+  // Indicando ao express que os arquivos estáticos estão na pasta 'public'
   app.use(express.static("public")); 
 	
   // Iniciando o servidor local

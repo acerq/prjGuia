@@ -1,5 +1,5 @@
 {
-  "name": "guia-rosa",
+  "name": "GuiaRosa",
   "version": "1.0.0",
   "description": "Guia Rosa app",
   "main": "server.js",
@@ -25,6 +25,6 @@
   "keywords": [
     "progressive-web-app",
     "pwa",
-    "installable web app"
+    "Guia Rosa"
   ]
 }
