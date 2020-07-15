@@ -27,7 +27,7 @@ export default class ViewPaciente {
     this.btExcluir = document.getElementById("btExcluir");
     this.btSair = document.getElementById("btSair");
 
-    this.inputIndice = document.getElementById("indice");
+    this.divMensagem = document.getElementById("divMensagem");
     this.inputCpf = document.getElementById("tfCpf");
     this.inputNome = document.getElementById("tfNome");
     this.inputCelular = document.getElementById("tfCelular");
@@ -86,7 +86,7 @@ export default class ViewPaciente {
       view.inputCelular.value = "";
       view.inputEmail.value = "";
       view.inputEndereco.value = "";
-      view.inputIndice.value = "Incluindo...";
+      view.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
       view.operacao = "Incluir";
     }
   }
@@ -96,7 +96,7 @@ export default class ViewPaciente {
   alterar() {
     if (view.operacao == "Navegar") {
       view.inabilitarBotoes();
-      view.inputIndice.value = "Alterando...";
+      view.divMensagem.innerHTML = "<center>Alterando...</center><hr/>";
       view.operacao = "Alterar";
     }
   }
@@ -106,7 +106,7 @@ export default class ViewPaciente {
   excluir() {
     if (view.operacao == "Navegar") {
       view.inabilitarBotoes();
-      view.inputIndice.value = "Confirmar Exclusão?";
+      view.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
       view.operacao = "Excluir";
     }
   }
@@ -277,9 +277,9 @@ export default class ViewPaciente {
       view.btAlterar.disabled = true;
       view.btExcluir.disabled = true;
     }
-    if (view.posAtual + 1 > 0) view.inputIndice.value = view.posAtual + 1;
-    else view.inputIndice.value = "-";
-    if (!mostrarDivNavegacao) view.divNavegacao.hidden = true;
+    view.divMensagem.innerHTML = "<p><center>Cadastro de Pacientes</center></p><hr/>";
+    if (!mostrarDivNavegacao) 
+    	view.divNavegacao.hidden = true;
   }
 
   //-----------------------------------------------------------------------------------------//
