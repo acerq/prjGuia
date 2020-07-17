@@ -32,6 +32,7 @@ var endereco;
 var funcaoMD5 = new Function("a", "return md5(a)");
 
 $(document).ready(function() {
+  tirarEspera();
   $("#tfCpf").mask("999.999.999-99");
   $("#tfCelular").mask("(99) 9999-9999?9");
 });
@@ -85,11 +86,13 @@ function abrirDbApp() {
   };
 
   requestDB.onerror = event => {
+    tirarEspera();
     console.log("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
     alert("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
   };
 
   requestDB.onsuccess = event => {
+    tirarEspera();
     console.log("(cadusuario.js) [AppUsr] Sucesso");
     db = event.target.result;
     senha = tfSenha.value;
@@ -145,7 +148,6 @@ function renderCriarUsuario(data) {
 //-----------------------------------------------------------------------------------------//
 
 function doIncluirPaciente() {
-  
   console.log("(cadusuario.js) Executando Incluir Paciente " + cpf);
   return fetch(
     "/incluirPaciente/" +
@@ -269,11 +271,13 @@ function callbackCriar() {
     alert("O endereço deve ser preenchido.");
     return;
   }
-  document.body.style.cursor = "wait";
+      
+  colocarEspera();
+
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   doIncluirPaciente().then(retorno => {
     console.log("(cadusuario.js) callbackCriar retorno", retorno);
-    document.body.style.cursor = "default";
+    tirarEspera();
     if (retorno.hasOwnProperty("status")) {
       if (retorno.status == "success") {
         // Guarda os dados no banco local
@@ -288,10 +292,19 @@ function callbackCriar() {
     } else
       alert(retorno.erro);
   });
-  document.body.style.cursor = "default";
 }
 
 //-----------------------------------------------------------------------------------------//
 
-btCancelar.addEventListener("click", callbackCancelar);
+function colocarEspera() {
+  $("div.circle").addClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function tirarEspera() {
+  $("div.circle").removeClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
 btCriar.addEventListener("click", callbackCriar);

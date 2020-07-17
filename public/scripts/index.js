@@ -17,7 +17,7 @@ const btOk = document.getElementById("btOk");
 const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
 
-var funcaoMD5 = new Function('a', 'return md5(a)');
+var fnMD5 = new Function('a', 'return md5(a)');
 var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
@@ -111,7 +111,7 @@ function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
   objectStoreRequest.onsuccess = function(event) {
 	  objectStoreRequest = store.add({
 		  login: login,
-		  senha: funcaoMD5(senha),
+		  senha: fnMD5(senha),
 		  nome: nome,
 		  email: email,
 		  celular : celular,
@@ -142,15 +142,14 @@ function renderEfetuarLogin(data) {
   }
   console.log("renderEfetuarLogin -> ", data);
   if (data.hasOwnProperty("erro")) {
-    if(usrApp == null || tfLogin.value != usrApp.login || funcaoMD5(tfSenha.value) != usrApp.senha) {
+    if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
       alert(data.erro);
       divInstrucao.innerHTML = "<b>Login não autorizado</b>";     
       return;
     }
-    if(tfLogin.value == usrApp.login && funcaoMD5(tfSenha.value) == usrApp.senha) {
+    if(tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
       doDeterminarUsuarioLocal().then(retorno => {
         console.log("callbackCriarUsuario retorno", retorno);
-        document.body.style.cursor = "default";
         window.location.href = "inicio.html";
         return;
       });
@@ -204,7 +203,7 @@ function doDeterminarUsuarioLocal() {
 
 function doEfetuarLogin(login, senha) {
   console.log("(app.js) Executando efetuarLogin " + login + " " + senha);
-  return fetch("/login/" + login + "/" + funcaoMD5(senha))
+  return fetch("/login/" + login + "/" + fnMD5(senha))
     .then(response => {
       console.log("(app.js) efetuarLogin response");
       return response.json();
@@ -222,7 +221,7 @@ function callbackOk() {
   const login = tfLogin.value;
   const senha = tfSenha.value;
 
-  // document.body.style.cursor = "url(/images/wait.gif)";
+  colocarEspera();
   document.body.style.cursor = "wait";
   // chama efetuarLogin e atualiza a tela
   doEfetuarLogin(login, senha).then(retorno => {
@@ -250,5 +249,12 @@ function callbackCriar() {
 
 // -----------------------------------------------------------------------------------------//
 
+function colocarEspera() {
+  $("div.circle").addClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
 btOk.addEventListener("click", callbackOk);
 btNovo.addEventListener("click", callbackCriar);
+tfSenha.addEventListener("keyup", function(event){if(event.keyCode === 13){callbackOk();}});

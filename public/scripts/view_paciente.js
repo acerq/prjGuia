@@ -108,6 +108,7 @@ export default class ViewPaciente {
       view.inabilitarBotoes();
       view.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
       view.operacao = "Excluir";
+      view.btSalvar.textContent = "Excluir";
     }
   }
 
@@ -280,6 +281,7 @@ export default class ViewPaciente {
     view.divMensagem.innerHTML = "<p><center>Cadastro de Pacientes</center></p><hr/>";
     if (!mostrarDivNavegacao) 
     	view.divNavegacao.hidden = true;
+    view.btSalvar.textContent = "Salvar";
   }
 
   //-----------------------------------------------------------------------------------------//

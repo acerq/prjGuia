@@ -1,4 +1,4 @@
-"use strict";
+ "use strict";
 
 const tfExame = document.getElementById("tfExame");
 const cbPaciente = document.getElementById("cbPaciente");
@@ -25,6 +25,8 @@ var senha = null;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
 var funcaoObterUsuario = new Function("b", "return usrApp.login");
+var fnTirarEspera = new Function("tirarEspera()");
+var fnColocarEspera = new Function("colocarEspera()");
 
 //-----------------------------------------------------------------------------------------//
 
@@ -41,6 +43,7 @@ function callbackPeriodo() {
   doObterPeriodo().then(retorno => {
     console.log("(app.js) callBackPeriodo retorno", retorno);
     renderObterPeriodo(retorno);
+    fnTirarEspera();
   });
 }
 
@@ -92,6 +95,7 @@ function doVerificarSenha(senha) {
 //-----------------------------------------------------------------------------------------//
 
 function callbackObterLocais() {
+  fnColocarEspera();
   doObterLocais().then(retorno => {
     console.log("(app.js) callBackObterLocais retorno", retorno);
     renderObterLocais(retorno);
@@ -179,6 +183,7 @@ function callbackConsultarExames() {
     alert("Não foi indicado o local para realização do exame.");
     return;
   }
+  fnColocarEspera();
   tfExame.value = tfExame.value.toUpperCase();
   var strExame = tfExame.value;
   // chama doObterExames e atualiza a tela
@@ -252,16 +257,19 @@ function renderObterExames(data) {
   if (!data) {
     console.log("(app.js) renderObterExames sem conteúdo");
     alert("Erro na conexão com o Servidor #03APP");
+    fnTirarEspera();
     return;
   }
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
+    fnTirarEspera();
     return;
   } else console.log("(app.js) renderObterExames -> ", data);
 
   var arrayExames = data;
   var arrayExames = JSON.parse(data);
   if (arrayExames == null || arrayExames.length == 0) {
+    fnTirarEspera();
     alert(
       "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
     );
@@ -327,6 +335,7 @@ function renderObterExames(data) {
 
     element = document.getElementById("select2-cbExame-container");
     element.style = "line-height:16px;";
+    fnTirarEspera();
   });
 }
 
@@ -375,6 +384,7 @@ function doSolicitacao() {
 //-----------------------------------------------------------------------------------------//
 
 function renderSolicitacao(resposta) {
+  fnTirarEspera();
   if (!resposta) {
     console.log("(app.js) renderSolicitacao sem conteúdo");
     alert("Erro na solicitação do exame.");
@@ -383,7 +393,7 @@ function renderSolicitacao(resposta) {
   console.log("(app.js) renderSolicitacao -> ", resposta);
   if(resposta.mensagem == "Ok")	{
 	  alert("Exame agendado com sucesso");
-  	  history.go(-1);
+  	history.go(-1);
   } else {
 	  alert(resposta.mensagem);	  
   }
@@ -424,17 +434,17 @@ function callbackSolicitacao() {
     return;
   }
 
-  document.body.style.cursor = "wait";
+  fnColocarEspera();
   doVerificarSenha(senha).then(retorno => {
     console.log("(app.js) callBackSolicitacao retorno verificarSenha", retorno);
     if (!retorno) {
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       console.log("(app.js) renderVerificarSenha sem conteúdo");
       alert("Erro na conexão com o Servidor #03APP");
       return;
     }
     if (retorno.hasOwnProperty("erro")) {
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       alert(retorno.erro);
       return;
     }
@@ -442,7 +452,6 @@ function callbackSolicitacao() {
     doSolicitacao().then(retorno => {
       console.log("(app.js) callBackSolicitacao retorno", retorno);
       renderSolicitacao(retorno);
-      document.body.style.cursor = "default";
     });
   });
 }

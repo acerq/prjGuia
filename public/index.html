@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Guia Rosa App" />
     <link rel="apple-touch-icon" href="/images/icons/ios/ios-appicon-152-152.png" />
-    <!-- description --> 
+    <!-- description -->
     <meta name="description" content="Guia Rosa App" />
     <!--  meta theme-color -->
     <meta name="theme-color" content="#2F3BA2" />
@@ -25,9 +25,9 @@
   <body>
     <header class="header">
       <h1>Guia Rosa App</h1>
-      <button id="btInstall" aria-label="Instalar"></button>
     </header>
-    <main class="main">
+    <main class="main" id="main">
+      <div class="circle"></div>
       <div id="divInstrucao" class="apresentacao_app">
         <b>Efetue seu Login</b><br />
       </div>
@@ -48,8 +48,6 @@
     </main>
     <script src="scripts/md5.min.js"></script>
     <script src="scripts/index.js"></script>
-    <script src="scripts/install.js"></script>
-    <!-- Instalação -->
     <script>
       initApp();
     </script>
