@@ -155,13 +155,16 @@ function abrirApp() {
 // -----------------------------------------------------------------------------------------//
 
 function fecharApp() {
-  try {
-    navigator.app.exitApp();
-  }
-  catch(e) {
-	  var tamHistory = -window.history.length;
-	  window.location.reload(history.back());
-  }
+	try {
+		navigator.app.exitApp();
+	}
+	catch(e) {
+		var tamHistory = window.history.length;
+	    while(tamHistory > 0) {
+	    	window.history.go(-1);
+	    	tamHistory--;
+	    }
+	}
 }
 
 // -----------------------------------------------------------------------------------------//
