@@ -119,19 +119,19 @@ function incluirDbApp() {
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
   objectStoreRequest.onsuccess = function(event) {
-	db = event.target.result;
-	objectStoreRequest = store.add({
+    db = event.target.result;
+    objectStoreRequest = store.add({
       login: cpf,
       senha: funcaoMD5(senha),
       nome: nome,
       email: email,
-      celular : celular,
-      endereco : celular,
+      celular: celular,
+      endereco: celular,
       ehMedico: false
     });
     objectStoreRequest.onsuccess = function(event) {
-    	window.location.href = "inicio.html";
-    }
+      window.location.href = "inicio.html";
+    };
   };
 }
 
@@ -151,7 +151,7 @@ function doIncluirPaciente() {
   console.log("(cadusuario.js) Executando Incluir Paciente " + cpf);
   return fetch(
     "/incluirPaciente/" +
-      cpf.replace(/\.|-/g,'')  +
+      cpf.replace(/\.|-/g, "") +
       "/" +
       nome +
       "/" +
@@ -159,7 +159,7 @@ function doIncluirPaciente() {
       "/" +
       email +
       "/" +
-      celular.replace(/\(|\)|\s|-/g,'') +
+      celular.replace(/\(|\)|\s|-/g, "") +
       "/" +
       endereco
   )
@@ -244,7 +244,7 @@ function callbackCriar() {
     alert("O email é inválido.");
     return;
   }
-  // Verificando a senha 
+  // Verificando a senha
   senha = tfSenha.value;
   if (senha == null || senha == "") {
     alert("A senha deve ser preenchida.");
@@ -271,26 +271,24 @@ function callbackCriar() {
     alert("O endereço deve ser preenchido.");
     return;
   }
-      
+
   colocarEspera();
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   doIncluirPaciente().then(retorno => {
     console.log("(cadusuario.js) callbackCriar retorno", retorno);
-    tirarEspera();
     if (retorno.hasOwnProperty("status")) {
       if (retorno.status == "success") {
         // Guarda os dados no banco local
         abrirDbApp();
         // Solicita ao server.js para guardar os dados do usuário
         doGuardarUsuarioCorrente().then(retorno => {
-          renderCriarUsuario(retorno);
           console.log("(cadusuario.js) callbackCriar retorno", retorno);
+          renderCriarUsuario(retorno);
         });
-      } else 
-      alert(retorno.msg);
-    } else
-      alert(retorno.erro);
+      } else alert(retorno.msg);
+    } else alert(retorno.erro);
+    tirarEspera();
   });
 }
 

@@ -5,6 +5,7 @@ import DaoPaciente from "./dao_paciente.js";
 var view;
 
 export default class ViewSolicitacao {
+
   constructor() {
     this.daoPaciente = new DaoPaciente();
     this.arrayPacientes = [];
@@ -53,7 +54,7 @@ export default class ViewSolicitacao {
       } else {
         view.cbPaciente.remove(view.cbPaciente.selectedIndex);
         view.btPacientes.hidden = true;
-        view.cbPaciente.style = "width:100%";
+        view.cbPaciente.style = "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
         view.arrayPacientes = [
           {
             cpf: view.usrApp.login,
