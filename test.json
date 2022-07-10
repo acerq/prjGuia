@@ -1,0 +1,46 @@
+{
+	"MerchantOrderId": "1637535850104",
+	"Customer": {
+		"Name": "JOSÉ DA SILVA ACCEPT",
+		"Identity": "12345678909",
+		"IdentityType": "CPF",
+		"Email": "jose@eu.com.br",
+		"BillingAddress": {
+			"Street": "Rua Farmaceutico Abel de Oliveira",
+			"Number": "123",
+			"Complement": "",
+			"District": "Piratininga",
+			"ZipCode": "24350-510",
+			"State": "RJ",
+			"City": "Niterói",
+			"Country": "Brasil"
+		}
+	},
+	"Payment": {
+		"Type": "SplittedCreditCard",
+		"Amount": "40000",
+		"Capture": true,
+		"Installments": 1,
+		"SoftDescriptor": "GuiaRosa",
+		"CreditCard": {"CardNumber": "4111111111111111", "Holder": "JOSÉ DA SILVA ACCEPT", "ExpirationDate": "12/2022", "SecurityCode": "123", "Brand": "VISA", "SaveCard": "false"},
+		"FraudAnalysis": {
+			"Provider": "Cybersource",
+			"TotalOrderAmount": "40000",
+			"Shipping": {"ShippingMethod": "None"},
+			"browser": {"ipaddress": "\"186.223.170.234\"", "browserfingerprint": "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b1637535850104"},
+			"MerchantDefinedFields": [
+				{"Id": 1, "Value": "12345678909"},
+				{"Id": 4, "Value": "Movel"},
+				{"Id": 9, "Value": "SIM"},
+				{"Id": 33, "Value": "Digitado"},
+				{"Id": 41, "Value": "CPF"},
+				{"Id": 52, "Value": "Saúde e Beleza"},
+				{"Id": 83, "Value": "Saúde"},
+				{"Id": 84, "Value": "PROPRIA"}
+			]
+		},
+		"Currency": "BRL",
+		"Country": "BRA",
+		"SplitPayments": [{"SubordinateMerchantId": "0ecde1ed-51b7-405c-b7ed-7f44af1fefa3", "Amount": "40000", "Fares": {"Mdr": "20.00", "Fee": 0}}]
+	}
+}

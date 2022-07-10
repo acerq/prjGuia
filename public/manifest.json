@@ -1,7 +1,8 @@
 {
-  "name": "GuiaRosaApp",
-  "short_name": "GuiaRosa",
-  "start_url": "index.html",
+  "name": "guiarosaapp",
+  "short_name": "guiarosa",
+  "start_url": "/",
+  "scope": ".",
   "icons": [
 	    {
 	      "src": "/images/icons/windows10/Square71x71Logo.scale-400.png",
@@ -416,7 +417,9 @@
 	      "sizes": "16x16"
 	    }
 	  ],
-  "display": "standalone",
+  "display_override": ["window-control-overlay", "minimal-ui"],
+  "display": "fullscreen",
   "background_color": "#3E4EB8",
   "theme_color": "#2F3BA2"
 }
+  

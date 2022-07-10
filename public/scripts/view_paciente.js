@@ -1,8 +1,6 @@
 "use strict";
 
-import DaoPaciente from "./dao_paciente.js";
-
-var view;
+import DaoPaciente from "/scripts/dao_paciente.js";
 
 export default class ViewPaciente {
   constructor() {
@@ -32,146 +30,233 @@ export default class ViewPaciente {
     this.inputNome = document.getElementById("tfNome");
     this.inputCelular = document.getElementById("tfCelular");
     this.inputEmail = document.getElementById("tfEmail");
-    this.inputEndereco = document.getElementById("tfEndereco");
+    this.inputRua = document.getElementById("tfRua");
+    this.inputNumero = document.getElementById("tfNumero");
+    this.inputComplemento = document.getElementById("tfComplemento");
+    this.inputBairro = document.getElementById("tfBairro");
+    this.inputCidade = document.getElementById("tfCidade");
+    this.inputUf = document.getElementById("tfUf");
+    this.inputCep = document.getElementById("tfCep");
 
+    //
+    // Pegando cada elemento de interface e acrescentando um atributo
+    // chamado 'viewer' que referenciará o objeto ViewPaciente. É necessário
+    // para tratamento das callbacks
+    //
     this.btSalvar.onclick = this.salvar;
+    this.btSalvar.viewer = this;
     this.btCancelar.onclick = this.cancelar;
+    this.btCancelar.viewer = this;
     this.btPrimeiro.onclick = this.primeiro;
+    this.btPrimeiro.viewer = this;
     this.btAnterior.onclick = this.anterior;
+    this.btAnterior.viewer = this;
     this.btProximo.onclick = this.proximo;
+    this.btProximo.viewer = this;
     this.btUltimo.onclick = this.ultimo;
+    this.btUltimo.viewer = this;
     this.btIncluir.onclick = this.incluir;
+    this.btIncluir.viewer = this;
     this.btAlterar.onclick = this.alterar;
+    this.btAlterar.viewer = this;
     this.btExcluir.onclick = this.excluir;
+    this.btExcluir.viewer = this;
     this.btSair.onclick = this.sair;
+    this.btSair.viewer = this;
+    this.inputCep.viewer = this;
 
     $(document).ready(function() {
       $("#tfCpf").mask("999.999.999-99");
       $("#tfCelular").mask("(99) 9999-9999?9");
+      $("#tfCep").mask("99999-999");
+    });
+
+    this.inputCpf.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputNome.focus();
+      }
+    });
+    this.inputNome.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputCelular.focus();
+      }
+    });
+    this.inputCelular.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputEmail.focus();
+      }
+    });
+    this.inputEmail.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputCep.focus();
+      }
+    });
+    this.inputCep.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.getEnderecoPeloCep(this.viewer.inputCep.value);
+        this.viewer.inputNumero.focus();
+      }
+    });
+    this.inputCep.addEventListener("blur", function(event) {
+      this.viewer.getEnderecoPeloCep(this.viewer.inputCep.value);
+      this.viewer.inputNumero.focus();
+    });
+    this.inputNumero.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputComplemento.focus();
+      }
+    });
+    this.inputComplemento.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.inputSenha.focus();
+      }
     });
   }
 
   //-----------------------------------------------------------------------------------------//
 
-  init() {
-    view.daoPaciente.abrirDB(view.solicitarObjs);
+  async init() {
+    await this.daoPaciente.abrirDB();
+    this.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
 
-  solicitarObjs() {
-    view.arrayPacientes = view.daoPaciente.obterPacientes(view.receberObjs);
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  receberObjs(array) {
-    view.arrayPacientes = array;
-    if (view.arrayPacientes.length > 0) {
-      view.posAtual = 0;
+  async solicitarObjs() {
+    this.arrayPacientes = await this.daoPaciente.obterPacientes();
+    if (this.arrayPacientes.length > 0) {
+      this.posAtual = 0;
     } else {
-      view.posAtual = -1;
-      view.cpfAtual = null;
+      this.posAtual = -1;
+      this.cpfAtual = null;
     }
-    view.atualizarInterface();
+    this.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   incluir() {
-    if (view.operacao == "Navegar") {
-      view.inabilitarBotoes();
-      view.inputCpf.value = "";
-      view.inputNome.value = "";
-      view.inputCelular.value = "";
-      view.inputEmail.value = "";
-      view.inputEndereco.value = "";
-      view.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
-      view.operacao = "Incluir";
+    // Não podemos fazer a associação do this ao ViewPaciente pois o this é o botão
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.inputCpf.value = "";
+      viewer.inputNome.value = "";
+      viewer.inputCelular.value = "";
+      viewer.inputEmail.value = "";
+      viewer.inputRua.value = "";
+      viewer.inputNumero.value = "";
+      viewer.inputComplemento.value = "";
+      viewer.inputBairro.value = "";
+      viewer.inputCep.value = "";
+      viewer.inputCidade.value = "";
+      viewer.inputUf.value = "";
+      viewer.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
+      viewer.operacao = "Incluir";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   alterar() {
-    if (view.operacao == "Navegar") {
-      view.inabilitarBotoes();
-      view.divMensagem.innerHTML = "<center>Alterando...</center><hr/>";
-      view.operacao = "Alterar";
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.divMensagem.innerHTML = "<center>Alterando...</center><hr/>";
+      viewer.operacao = "Alterar";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   excluir() {
-    if (view.operacao == "Navegar") {
-      view.inabilitarBotoes();
-      view.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
-      view.operacao = "Excluir";
-      view.btSalvar.textContent = "Excluir";
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.divMensagem.innerHTML =
+        "<center>Confirmar Exclusão?</center><hr/>";
+      viewer.operacao = "Excluir";
+      viewer.btSalvar.textContent = "Excluir";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   salvar() {
+    let viewer = this.viewer;
     let commit = false;
-    if (view.operacao == "Incluir") {
-      commit = view.daoPaciente.incluir(
-        view.inputCpf.value,
-        view.inputNome.value,
-        view.inputCelular.value,
-        view.inputEmail.value,
-        view.inputEndereco.value
+    if (viewer.operacao == "Incluir") {
+      commit = viewer.daoPaciente.incluir(
+        viewer.inputCpf.value,
+        viewer.inputNome.value,
+        viewer.inputCelular.value,
+        viewer.inputEmail.value,
+        viewer.inputRua.value,
+        viewer.inputNumero.value,
+        viewer.inputComplemento.value,
+        viewer.inputBairro.value,
+        viewer.inputCep.value,
+        viewer.inputCidade.value,
+        viewer.inputUf.value
       );
-    } else if (view.operacao == "Alterar") {
-      commit = view.daoPaciente.alterar(
-        view.cpfAtual,
-        view.inputCpf.value,
-        view.inputNome.value,
-        view.inputCelular.value,
-        view.inputEmail.value,
-        view.inputEndereco.value
+    } else if (viewer.operacao == "Alterar") {
+      commit = viewer.daoPaciente.alterar(
+        viewer.cpfAtual,
+        viewer.inputCpf.value,
+        viewer.inputNome.value,
+        viewer.inputCelular.value,
+        viewer.inputEmail.value,
+        viewer.inputRua.value,
+        viewer.inputNumero.value,
+        viewer.inputComplemento.value,
+        viewer.inputBairro.value,
+        viewer.inputCep.value,
+        viewer.inputCidade.value,
+        viewer.inputUf.value
       );
-    } else if (view.operacao == "Excluir") {
-      commit = view.daoPaciente.excluir(view.cpfAtual);
+    } else if (viewer.operacao == "Excluir") {
+      commit = viewer.daoPaciente.excluir(viewer.cpfAtual);
     }
-    if(commit)
-      view.solicitarObjs();
+    if (commit) viewer.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   primeiro() {
-    view.posAtual = 0;
-    view.atualizarInterface();
+    let viewer = this.viewer;
+    viewer.posAtual = 0;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   anterior() {
-    view.posAtual--;
-    view.atualizarInterface();
+    let viewer = this.viewer;
+    viewer.posAtual--;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   proximo() {
-    view.posAtual++;
-    view.atualizarInterface();
+    let viewer = this.viewer;
+    viewer.posAtual++;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   ultimo() {
-    view.posAtual = view.arrayPacientes.length - 1;
-    view.atualizarInterface();
+    let viewer = this.viewer;
+    viewer.posAtual = viewer.arrayPacientes.length - 1;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   cancelar() {
-    view.atualizarInterface();
+    let viewer = this.viewer;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -183,109 +268,150 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   restaurarFuncoes() {
-    view.divNavegacao.hidden = false;
+    this.divNavegacao.hidden = false;
 
-    view.btIncluir.disabled = false;
-    view.btAlterar.disabled = false;
-    view.btExcluir.disabled = false;
-    view.inputCpf.disabled = true;
-    view.inputNome.disabled = true;
-    view.inputCelular.disabled = true;
-    view.inputEmail.disabled = true;
-    view.inputEndereco.disabled = true;
+    this.btIncluir.disabled = false;
+    this.btAlterar.disabled = false;
+    this.btExcluir.disabled = false;
+    this.inputCpf.disabled = true;
+    this.inputNome.disabled = true;
+    this.inputCelular.disabled = true;
+    this.inputEmail.disabled = true;
+    this.inputRua.disabled = true;
+    this.inputNumero.disabled = true;
+    this.inputComplemento.disabled = true;
+    this.inputBairro.disabled = true;
+    this.inputCep.disabled = true;
+    this.inputCidade.disable = true;
+    this.inputUf.disable = true;
 
-    view.btAlterar.hidden = false;
-    view.btIncluir.hidden = false;
-    view.btExcluir.hidden = false;
-    view.btPrimeiro.hidden = false;
-    view.btAnterior.hidden = false;
-    view.btProximo.hidden = false;
-    view.btUltimo.hidden = false;
+    this.btAlterar.hidden = false;
+    this.btIncluir.hidden = false;
+    this.btExcluir.hidden = false;
+    this.btPrimeiro.hidden = false;
+    this.btAnterior.hidden = false;
+    this.btProximo.hidden = false;
+    this.btUltimo.hidden = false;
 
-    view.btCancelar.hidden = true;
-    view.btSalvar.hidden = true;
-    view.operacao = "Navegar";
+    this.btCancelar.hidden = true;
+    this.btSalvar.hidden = true;
+    this.operacao = "Navegar";
   }
 
   //-----------------------------------------------------------------------------------------//
 
   inabilitarBotoes() {
-    view.divNavegacao.hidden = true;
+    this.divNavegacao.hidden = true;
 
-    view.btAlterar.disabled = true;
-    view.btIncluir.disabled = true;
-    view.btExcluir.disabled = true;
-    view.btPrimeiro.disabled = true;
-    view.btAnterior.disabled = true;
-    view.btProximo.disabled = true;
-    view.btUltimo.disabled = true;
+    this.btAlterar.disabled = true;
+    this.btIncluir.disabled = true;
+    this.btExcluir.disabled = true;
+    this.btPrimeiro.disabled = true;
+    this.btAnterior.disabled = true;
+    this.btProximo.disabled = true;
+    this.btUltimo.disabled = true;
 
-    view.btAlterar.hidden = true;
-    view.btIncluir.hidden = true;
-    view.btExcluir.hidden = true;
+    this.btAlterar.hidden = true;
+    this.btIncluir.hidden = true;
+    this.btExcluir.hidden = true;
 
-    view.btPrimeiro.hidden = true;
-    view.btAnterior.hidden = true;
-    view.btProximo.hidden = true;
-    view.btUltimo.hidden = true;
+    this.btPrimeiro.hidden = true;
+    this.btAnterior.hidden = true;
+    this.btProximo.hidden = true;
+    this.btUltimo.hidden = true;
 
-    view.btCancelar.hidden = false;
-    view.btSalvar.hidden = false;
-    view.inputCpf.disabled = false;
-    view.inputNome.disabled = false;
-    view.inputCelular.disabled = false;
-    view.inputEmail.disabled = false;
-    view.inputEndereco.disabled = false;
+    this.btCancelar.hidden = false;
+    this.btSalvar.hidden = false;
+    this.inputCpf.disabled = false;
+    this.inputNome.disabled = false;
+    this.inputCelular.disabled = false;
+    this.inputEmail.disabled = false;
+
+    this.inputCep.disabled = false;
+    this.inputNumero.disabled = false;
+    this.inputComplemento.disabled = false;
+    this.inputRua.disabled = true;
+    this.inputBairro.disabled = true;
+    this.inputCidade.disable = true;
+    this.inputUf.disable = true;
   }
 
   //-----------------------------------------------------------------------------------------//
+
   atualizarInterface() {
     var mostrarDivNavegacao = false;
 
-    view.restaurarFuncoes();
-    if (view.posAtual > 0) {
-      view.btPrimeiro.disabled = false;
-      view.btAnterior.disabled = false;
+    this.restaurarFuncoes();
+    if (this.posAtual > 0) {
+      this.btPrimeiro.disabled = false;
+      this.btAnterior.disabled = false;
       mostrarDivNavegacao = true;
     } else {
-      view.btPrimeiro.disabled = true;
-      view.btAnterior.disabled = true;
+      this.btPrimeiro.disabled = true;
+      this.btAnterior.disabled = true;
     }
-    if (view.posAtual < view.arrayPacientes.length - 1) {
-      view.btProximo.disabled = false;
-      view.btUltimo.disabled = false;
+    if (this.posAtual < this.arrayPacientes.length - 1) {
+      this.btProximo.disabled = false;
+      this.btUltimo.disabled = false;
       mostrarDivNavegacao = true;
     } else {
-      view.btProximo.disabled = true;
-      view.btUltimo.disabled = true;
+      this.btProximo.disabled = true;
+      this.btUltimo.disabled = true;
     }
 
-    if (view.posAtual > -1) {
-      view.cpfAtual = view.arrayPacientes[view.posAtual].cpf;
-      view.inputCpf.value = view.arrayPacientes[view.posAtual].cpf;
-      view.inputNome.value = view.arrayPacientes[view.posAtual].nome;
-      view.inputCelular.value = view.arrayPacientes[view.posAtual].celular;
-      view.inputEmail.value = view.arrayPacientes[view.posAtual].email;
-      view.inputEndereco.value = view.arrayPacientes[view.posAtual].endereco;
-      view.btAlterar.disabled = false;
-      view.btExcluir.disabled = false;
+    if (this.posAtual > -1) {
+      this.cpfAtual = this.arrayPacientes[this.posAtual].cpf;
+      this.inputCpf.value = this.arrayPacientes[this.posAtual].cpf;
+      this.inputNome.value = this.arrayPacientes[this.posAtual].nome;
+      this.inputCelular.value = this.arrayPacientes[this.posAtual].celular;
+      this.inputEmail.value = this.arrayPacientes[this.posAtual].email;
+      this.inputRua.value = this.arrayPacientes[this.posAtual].rua;
+      this.inputNumero.value = this.arrayPacientes[this.posAtual].numero;
+      this.inputComplemento.value = this.arrayPacientes[
+        this.posAtual
+      ].complemento;
+      this.inputBairro.value = this.arrayPacientes[this.posAtual].bairro;
+      this.inputCep.value = this.arrayPacientes[this.posAtual].cep;
+      this.inputCidade.value = this.arrayPacientes[this.posAtual].cidade;
+      this.inputUf.value = this.arrayPacientes[this.posAtual].uf;
+      this.btAlterar.disabled = false;
+      this.btExcluir.disabled = false;
     } else {
-      view.inputCpf.value = "";
-      view.inputNome.value = "";
-      view.inputCelular.value = "";
-      view.inputEmail.value = "";
-      view.inputEndereco.value = "";
-      view.btAlterar.disabled = true;
-      view.btExcluir.disabled = true;
+      this.inputCpf.value = "";
+      this.inputNome.value = "";
+      this.inputCelular.value = "";
+      this.inputEmail.value = "";
+      this.inputRua.value = "";
+      this.inputNumero.value = "";
+      this.inputComplemento.value = "";
+      this.inputBairro.value = "";
+      this.inputCep.value = "";
+      this.inputCidade.value = "";
+      this.inputUf.value = "";
+      this.btAlterar.disabled = true;
+      this.btExcluir.disabled = true;
     }
-    view.divMensagem.innerHTML = "<p><center>Cadastro de Pacientes</center></p><hr/>";
-    if (!mostrarDivNavegacao) 
-    	view.divNavegacao.hidden = true;
-    view.btSalvar.textContent = "Salvar";
+    this.divMensagem.innerHTML =
+      "<p><center>Cadastro de Pacientes</center></p><hr/>";
+    if (!mostrarDivNavegacao) this.divNavegacao.hidden = true;
+    this.btSalvar.textContent = "Salvar";
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  async getEnderecoPeloCep(cep) {
+    
+    let response = await fetch('/obterEnderecoPeloCep', 
+                             { 'method': 'POST', 'headers': {'Accept':'application/json','Content-Type':'application/json'},
+                               'body': JSON.stringify({'cep':cep})  });
+    let dados = await response.json();
+    if (dados.resultado == "1") {
+      this.inputRua.value = dados.tipo_logradouro + " " + dados.logradouro;
+      this.inputBairro.value = dados.bairro;
+      this.inputCidade.value = dados.cidade;
+      this.inputUf.value = dados.uf;
+    } else alert("CEP Não Encontrado: " + cep);
   }
 
   //-----------------------------------------------------------------------------------------//
 }
-
-view = new ViewPaciente();
-view.init();

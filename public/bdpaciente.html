@@ -27,25 +27,51 @@
         <div class="grade">
           <div class="rotulo" id="divMensagem"></div>
           <div class="rotulo"></div>
+
           <div class="rotulo">CPF:</div>
           <div>
-            <input id="tfCpf" type="text" disabled />
+            <input id="tfCpf" type="text" />
           </div>
           <div class="rotulo">Nome:</div>
           <div>
-            <input id="tfNome" type="text" disabled />
+            <input id="tfNome" type="text" />
           </div>
           <div class="rotulo">Celular:</div>
           <div>
-            <input id="tfCelular" type="text" disabled />
+            <input id="tfCelular" type="text" />
           </div>
           <div class="rotulo">Email:</div>
           <div>
-            <input id="tfEmail" type="text" disabled />
+            <input id="tfEmail" type="text" />
           </div>
-          <div class="rotulo">Endereço:</div>
-          <div>
-            <input id="tfEndereco" type="text" disabled />
+          
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns: 25% 72%;">
+            <div>Cep:</div>
+            <div style="margin-left:3%">Logradouro:</div>
+          </div>
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns: 25% 72%;">
+            <input id="tfCep" type="text" />
+            <input id="tfRua"  style="margin-left:3%" type="text" disabled/>
+          </div>
+
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns: 30% 67%">
+            <div>Número:</div>
+            <div style="margin-left:3%">Complemento:</div>
+          </div>
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns:30% 67%;">
+            <input id="tfNumero" type="text" />
+            <input id="tfComplemento" style="margin-left:3%" type="text" />
+          </div>
+          
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns: 40% 37% 20%;">
+            <div>Bairro:</div>
+            <div style="margin-left:3%">Cidade:</div>
+            <div style="margin-left:10%">UF:</div>
+          </div>
+          <div style="margin:0px;padding:0px;display:grid;grid-template-columns: 40% 37% 20%">
+            <input id="tfBairro" type="text" disabled />
+            <input id="tfCidade" style="margin-left:3%" type="text" disabled/>
+            <input id="tfUf" style="margin-left:10%" type="text" disabled/>
           </div>
         </div>
         <div class="caixaBotoes">
@@ -57,22 +83,11 @@
               Salvar
             </button>
           </div>
-          <div
-            id="divNavegacao"
-            style="background-color: #EEE;border-radius: 4px;"
-          >
-            <button id="btPrimeiro" disabled>
-              Primeiro
-            </button>
-            <button id="btAnterior" disabled>
-              Anterior</button
-            ><br />
-            <button id="btProximo" disabled>
-              Próximo
-            </button>
-            <button id="btUltimo" disabled>
-              Último</button
-            ><br />
+          <div id="divNavegacao">
+            <div><button id="btPrimeiro" disabled>&#8666;</button></div>
+            <div><button id="btAnterior" disabled><b>&#8592;</b></button></div>
+            <div><button id="btProximo" disabled>&#8594;</button></div>
+            <div><button id="btUltimo" disabled>&#8667;</button></div>
           </div>
           <div>
             <button id="btIncluir">
@@ -92,7 +107,8 @@
       </div>
       <div id="logo"></div>
     </main>
+    <footer class="footer"></footer>
     <script src="scripts/nav.js"></script>
-    <script type="module" src="scripts/view_paciente.js"></script>
+    <script type="module" src="scripts/uc_paciente.js"></script>
   </body>
 </html>

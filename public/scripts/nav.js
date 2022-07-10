@@ -1,20 +1,14 @@
 const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
-var inicio = false;
+
+// -----------------------------------------------------------------------------------------//
 
 $("#hdr").load("burger.html");
 
 // -----------------------------------------------------------------------------------------//
 
-doObterUsuarioCorrente().then(retorno => {
-  console.log("abrirApp retorno", retorno);
-  renderObterUsuarioCorrente(retorno);
-});
-
-// -----------------------------------------------------------------------------------------//
-
 setTimeout(function() {
-  $("div.burger").on(click, function() {
+  $("div.burger").on("click", function() {
     if (!$(this).hasClass("open")) {
       openMenu();
     } else {
@@ -26,12 +20,10 @@ setTimeout(function() {
 // -----------------------------------------------------------------------------------------//
 
 if ("ontouchstart" in window) {
-  var click = "click";
-} else {
-  var click = "click";
+  //  var click = "click";
 }
 
-$("div.burger").on(click, function() {
+$("div.burger").on("click", function() {
   if (!$(this).hasClass("open")) {
     openMenu();
   } else {
@@ -39,11 +31,19 @@ $("div.burger").on(click, function() {
   }
 });
 
-$("div.menu ul li a").on(click, function(e) {
+$("div.menu ul li a").on("click", function(e) {
   e.preventDefault();
   closeMenu();
 });
 
+// -----------------------------------------------------------------------------------------//
+
+function irPara(ref) {
+  if (!ref.includes(".pdf")) window.location.href = ref;
+  else window.open(ref);
+}
+
+// -----------------------------------------------------------------------------------------//
 
 function openMenu() {
   $("div.circle").addClass("expand");
@@ -61,10 +61,11 @@ function openMenu() {
     $("div.x").addClass("rotate45");
     $("div.z").addClass("rotate135");
   }, 120);
-
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
 }
+
+// -----------------------------------------------------------------------------------------//
 
 function closeMenu() {
   $("div.burger").removeClass("open");
@@ -91,80 +92,171 @@ function closeMenu() {
 
 // -----------------------------------------------------------------------------------------//
 
-function doObterUsuarioCorrente() {
-  console.log("(app.js) Executando doLoad ");
-  return fetch("/obterUsuarioCorrente")
-    .then(response => {
-      console.log("(app.js) doObterUsuarioCorrente response", response.body);
+async function doObterUsuarioCorrente() {
+  let response = await fetch("/obterUsuarioCorrente", { credentials : "include" });
+  usrApp = await response.json();
+  renderObterUsuarioCorrente(); 
+  return usrApp;
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function renderObterUsuarioCorrente() {
+  if (usrApp.login != null) {
+    if (usrApp.ehMedico) {
+      $("#menu").load("menu_medico.html");
+      $("#container-de-icones").load("icones_medico.html");
+      if(document.URL.includes("inicio.html"))
+        divConteudo.innerHTML = "<center><b>Atendimento a Médicos</center></b><br/>";
+    } else {
+      $("#menu").load("menu_paciente.html");
+      $("#container-de-icones").load("icones_paciente.html");
+      if(document.URL.includes("inicio.html"))
+        divConteudo.innerHTML = "";
+    }
+    if(document.URL.includes("inicio.html"))
+      divConteudo.innerHTML += "<center><b>Bem-vindo(a)</b> " + usrApp.nome +
+                             "&nbsp;&nbsp;(" + usrApp.login + ")</center>";
+  } else {
+    if(!exigirLogin()) {
+      $("#menu").load("menu_sem_usuario.html");
+      $("#container-de-icones").load("icones_paciente.html");
+    } else {
+      loginApp();
+    }
+  }
+  closeMenu();
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function cadastroDePacientes() {
+  return fetch("/verificarTimeout", { credentials : "include" })
+    .then(async response => {
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
+        irPara("index.html");
+        return;
+      }
+      irPara("bdpaciente.html");
       return response.json();
     })
     .catch(e => {
-      console.log("(app.js) doObterUsuarioCorrente catch", e);
       return null;
     });
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function renderObterUsuarioCorrente(retorno) {
-  usrApp = retorno;
-  if (usrApp.ehMedico) 
-	  $("#menu").load("menu_medico.html");
-  else 
-	  $("#menu").load("menu_paciente.html");
-
-  if (inicio) {
-    console.log(usrApp);
-    divConteudo.innerHTML = "";
-    if (usrApp.ehMedico)
-      divConteudo.innerHTML +=
-        "<center><b>Atendimento a Médicos</center></b><br/>";
-    divConteudo.innerHTML +=
-      "<center><b>Bem-vindo(a)</b> " +
-      usrApp.nome +
-      "&nbsp;&nbsp;(" +
-      usrApp.login +
-      ")</center>";
-  }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-function cadastroDePacientes() {
-  window.location.href = "cadastro.html";
-}
-
-// -----------------------------------------------------------------------------------------//
-
 function solicitacaoDeExames() {
-  window.location.href = "solicitacao.html";
+  return fetch("/verificarTimeout", { credentials : "include" })
+    .then(async response => {
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
+        irPara("index.html");
+        return;
+      }
+      irPara("solicitacao.html");
+      return response.json();
+    })
+    .catch(e => {
+      return null;
+    });
 }
 
 // -----------------------------------------------------------------------------------------//
 
-window.retornarUsrApp = function() {
+function apresentarListas() {
+  return fetch("/verificarTimeout", { credentials : "include" })
+    .then(async response => {
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
+        irPara("index.html");
+        return;
+      }
+      irPara("listas.html");
+      return response.json();
+    })
+    .catch(e => {
+      return null;
+    });
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function paginaInicial() {
+  return fetch("/verificarTimeout", { credentials : "include" })
+    .then(async response => {
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
+        irPara("index.html");
+        return;
+      }
+      irPara("inicio.html");
+      return response.json();
+    })
+    .catch(e => {
+      return null;
+    });
+}
+
+// -----------------------------------------------------------------------------------------//
+
+window.retornarUsrApp = async function() {
+  if(usrApp == null) {
+      await doObterUsuarioCorrente();
+      renderObterUsuarioCorrente();
+  }
   return usrApp;
 };
 
 // -----------------------------------------------------------------------------------------//
 
-function abrirApp() {
-  inicio = true;
+function loginApp() {
+  window.location.href='login.html';
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function fecharApp() {
-	try {
-		navigator.app.exitApp();
-	}
-	catch(e) {
-		var tamHistory = window.history.length;
-	    while(tamHistory > 0) {
-	    	window.history.go(-1);
-	    	tamHistory--;
-	    }
-	}
+async function obterUsrApp() {
+  await doObterUsuarioCorrente();
+  renderObterUsuarioCorrente();
+  return usrApp;
+}
+
+// -----------------------------------------------------------------------------------------//
+
+async function abrirApp() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/service-worker.js").then(reg => {
+      });
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------------------//
+
+async function fecharApp() {
+  let response = await fetch("/inicio", { credentials : "include" });
+  usrApp = await response.json();
+  closeMenu();
+  try {
+    navigator.app.exitApp();
+  } catch (e) {
+    var tamHistory = window.history.length;
+    if(tamHistory == 0)
+        window.location.href='index.html';
+    else
+      while (tamHistory > 0) {
+        window.history.go(-1);
+        tamHistory--;
+      }
+  }
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -180,3 +272,14 @@ function tirarEspera() {
 }
 
 // -----------------------------------------------------------------------------------------//
+
+function exigirLogin() {
+  let url = document.URL;
+  if(url.charAt(url.length - 1) == '/' || url.includes("cadusuario.html") || url.includes("login.html") || url.includes("consulta.html"))
+    return false;
+  return true;
+}
+
+// -----------------------------------------------------------------------------------------//
+
+obterUsrApp();

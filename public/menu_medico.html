@@ -2,13 +2,26 @@
 <div class="menu">
   <ul>
     <li>
-      <a href="bdpaciente.html" onclick="cadastroDePacientes()"
+      <a style="cursor:pointer;" onclick="paginaInicial()"
+        >Tela Inicial</a
+      >
+    </li>
+    <li>
+      <a style="cursor:pointer;" onclick="cadastroDePacientes()"
         >Cadastro de Pacientes</a
       >
     </li>
     <li>
-      <a href="solicitacao.html" onclick="solicitacaoDeExames()">Solicita&ccedil;&atilde;o de Exames</a>
+      <a style="cursor:pointer;" onclick="solicitacaoDeExames()"
+        >Solicitação de Exames</a
+      >
     </li>
-    <li><a onclick="fecharApp()">Sair</a></li>
+    <li>
+      <a style="cursor:pointer;" onclick="apresentarListas()"
+        >Locais para Exames</a
+      >
+    </li>
+    <li><a style="cursor:pointer;" onclick="alert('Versão 0.5')">Versão</a></li>
+    <li><a style="cursor:pointer;" onclick="fecharApp()">Sair</a></li>
   </ul>
 </div>
