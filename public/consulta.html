@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="/styles/select2.css" />
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="manifest" href="/manifest.json" />
-    <meta content='yes' name='mobile-web-app-capable'/>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Guia Rosa App" />
@@ -18,13 +17,6 @@
     <meta name="description" content="Guia Rosa App" />
     <meta name="theme-color" content="#2F3BA2" />
     <script src="scripts/jquery.js"></script>
-    
-    <script type="module">
-     import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
-     const el = document.createElement('pwa-update');
-     document.body.appendChild(el);
-    </script>
-    
   </head>
   <body>
     <header id="hdr" class="header">Guia Rosa App</header>
@@ -35,13 +27,15 @@
       </div>
       <div id="divConteudo" class="caixaDialog">
         <div class="grade">
-          <div class="rotulo">Local:</div>
-          <div id="divLocal" style="width:99%"></div><div></div>
+          <div class="rotulo">
+            Local:
+          </div>
+          <div id="divLocal"></div>
           <div class="rotulo">Exame:</div>
           <div id="divTfExame">
             <input
               id="tfExame"
-              style="width:78%"
+              style="width:75%"
               type="text"
               size="20"
               placeholder="Digite parte do nome do exame"
@@ -53,30 +47,7 @@
           <div class="rotulo"></div>
           <div id="divExame"></div>
         </div>
-        <div class="caixaBotoes">
-          <button id="btVoltarOuAgendar">
-            Gerar Voucher
-          </button>
-        </div>
         <div id="logo"></div>
-      </div>
- <div  class="container-de-icones">
-      <div
-          class="icone-container"
-          onclick="window.location.href='login.html'">
-          <div class="icone">
-            <img src="images/icons/paciente.png" />
-            <div class="texto">Efetuar Login</div>
-          </div>
-        </div>
-        <div
-          class="icone-container"
-          onclick="window.location.href='cadusuario.html';">
-          <div class="icone">
-            <img src="images/icons/paciente.png" />
-            <div class="texto">Criar Conta</div>
-          </div>
-        </div>
       </div>
     </main>
     <footer class="footer"></footer>

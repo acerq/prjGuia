@@ -3,14 +3,16 @@
 //-----------------------------------------------------------------------------------------//
 
 let deferredInstallPrompt = null;
+const installButton = document.getElementById("btInstall");
+installButton.addEventListener("click", installGuiaRosa);
 window.addEventListener("appinstalled", logAppInstalled);
 window.addEventListener("beforeinstallprompt", saveBeforeInstallPromptEvent);
 
 //-----------------------------------------------------------------------------------------//
 
 function saveBeforeInstallPromptEvent(evt) {
-  evt.preventDefault();
   deferredInstallPrompt = evt;
+  installButton.removeAttribute("hidden");
 }
 //-----------------------------------------------------------------------------------------//
 

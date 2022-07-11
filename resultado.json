@@ -1,0 +1,151 @@
+{
+	"MerchantOrderId": "1655666998099",
+	"Customer": {
+		"Name": "Alessandro de Almeida Castro Cerqueira",
+		"Identity": "00386048762",
+		"IdentityType": "CPF",
+		"Email": "alessandro.cerqueira@hotmail.com",
+		"BillingAddress": {
+			"Street": "Rua Farmaceutico Abel de Oliveira",
+			"Number": "19",
+			"Complement": "",
+			"ZipCode": "24350-510",
+			"City": "Niterói",
+			"State": "RJ",
+			"Country": "BR",
+			"District": "Piratininga"
+		},
+		"Phone": "5521992218828"
+	},
+	"Payment": {
+		"ServiceTaxAmount": 0,
+		"Installments": 1,
+		"Interest": 0,
+		"Capture": true,
+		"Authenticate": false,
+		"Recurrent": false,
+		"CreditCard": {
+			"CardNumber": "422061******9690",
+			"Holder": "ALESSANDRO castro",
+			"ExpirationDate": "11/2027",
+			"SaveCard": false,
+			"Brand": "Visa",
+			"PaymentAccountReference": "V0010014619237838087607777696"
+		},
+		"Tid": "10948168301V5K441RTC",
+		"ProofOfSale": "423183",
+		"AuthorizationCode": "323771",
+		"SoftDescriptor": "GuiaRosa",
+		"Provider": "Cielo",
+		"Eci": "7",
+		"FraudAnalysis": {
+			"Id": "bbd046ff-5050-4426-2d39-08da51d56b32",
+			"Status": 1,
+			"StatusDescription": "Accept",
+			"ReplyData": {
+				"AddressInfoCode": "UNV-ADDR",
+				"Score": 22,
+				"BinCountry": "BR",
+				"CardIssuer": "BANCO SANTANDER S.A.",
+				"CardScheme": "VISA CREDIT",
+				"HostSeverity": 1,
+				"IdentityInfoCode": "ID-M-NoHistory",
+				"InternetInfoCode": "FREE-EM",
+				"IpCity": "niteroi",
+				"IpCountry": "br",
+				"IpRoutingMethod": "fixed",
+				"IpState": "rj",
+				"ScoreModelUsed": "default_lac",
+				"VelocityInfoCode": "VELL-TIP",
+				"CasePriority": 3,
+				"FingerPrint": {
+					"CookiesEnabledField": "true",
+					"FlashEnabledField": "false",
+					"HashField": "fd6e85c932e447deb4cc581668714e1d",
+					"ImagesEnabledField": "true",
+					"JavascriptEnabledField": "true",
+					"TrueIpAddressField": "186.223.173.167",
+					"TrueIpAddressCityField": "niteroi",
+					"TrueIpAddressCountryField": "BR",
+					"SmartIdField": "fd6e85c932e447deb4cc581668714e1d",
+					"SmartIdConfidenceLevelField": "100",
+					"ScreenResolutionField": "1920x1080",
+					"BrowserLanguageField": "pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6"
+				},
+				"ProviderTransactionId": "6556671565536115004279"
+			},
+			"Sequence": "AnalyseFirst",
+			"SequenceCriteria": "OnSuccess",
+			"TotalOrderAmount": 1000,
+			"TransactionAmount": 0,
+			"MerchantDefinedFields": [
+				{"Id": "1", "Value": "00386048762"},
+				{"Id": "4", "Value": "Movel"},
+				{"Id": "9", "Value": "SIM"},
+				{"Id": "33", "Value": "Digitado"},
+				{"Id": "41", "Value": "CPF"},
+				{"Id": "52", "Value": "Saúde e Beleza"},
+				{"Id": "83", "Value": "Saúde"},
+				{"Id": "84", "Value": "PROPRIA"}
+			],
+			"Cart": {
+				"IsGift": false,
+				"ReturnsAccepted": false,
+				"Items": [
+					{
+						"Type": 0,
+						"Name": "PAM - ACUIDADE VISUAL A LASER (MONO)",
+						"Risk": 0,
+						"Sku": "607A",
+						"OriginalPrice": 0,
+						"UnitPrice": 1000,
+						"Quantity": 1,
+						"HostHedge": 0,
+						"NonSensicalHedge": 0,
+						"ObscenitiesHedge": 0,
+						"PhoneHedge": 0,
+						"TimeHedge": 0,
+						"VelocityHedge": 0,
+						"GiftCategory": 0,
+						"Weight": 0,
+						"CartType": 0
+					}
+				]
+			},
+			"Browser": {"CookiesAccepted": false, "IpAddress": "186.223.173.167", "BrowserFingerPrint": "1655666998099"},
+			"Shipping": {"Method": 0},
+			"FraudAnalysisReasonCode": 100,
+			"Provider": "Cybersource",
+			"IsRetryTransaction": false
+		},
+		"IsQrCode": false,
+		"Amount": 1000,
+		"ReceivedDate": "2022-06-19 16:32:34",
+		"CapturedAmount": 1000,
+		"CapturedDate": "2022-06-19 16:32:37",
+		"Status": 2,
+		"IsSplitted": true,
+		"ReturnMessage": "Transacao capturada com sucesso",
+		"ReturnCode": "00",
+		"PaymentId": "bda75041-67ae-4874-b933-c5c7262ba3bf",
+		"Type": "SplittedCreditCard",
+		"Currency": "BRL",
+		"Country": "BRA",
+		"Links": [
+			{"Method": "PUT", "Rel": "split", "Href": "https://split.braspag.com.br/api/transactions/bda75041-67ae-4874-b933-c5c7262ba3bf/split"},
+			{"Method": "GET", "Rel": "self", "Href": "https://apiquery.cieloecommerce.cielo.com.br/1/sales/bda75041-67ae-4874-b933-c5c7262ba3bf"},
+			{"Method": "PUT", "Rel": "void", "Href": "https://api.cieloecommerce.cielo.com.br/1/sales/bda75041-67ae-4874-b933-c5c7262ba3bf/void"}
+		],
+		"SplitPayments": [
+			{
+				"SubordinateMerchantId": "4df2e61e-48a2-4ab8-982f-a0ce337ae215",
+				"Amount": 1000,
+				"Fares": {"Mdr": 20, "Fee": 0},
+				"Splits": [
+					{"MerchantId": "4df2e61e-48a2-4ab8-982f-a0ce337ae215", "Amount": 800},
+					{"MerchantId": "de4e1615-5cd7-43a2-8837-5b45a41dd394", "Amount": 200}
+				]
+			}
+		]
+	}
+}
